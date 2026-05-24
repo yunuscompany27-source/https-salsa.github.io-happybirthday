@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Luxury Birthday Cinematic</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+
+:root{
+--bg1:#07050b;
+--bg2:#130814;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Inter,sans-serif;
+}
+
+body{
+overflow:hidden;
+height:100vh;
+background:
+radial-gradient(circle at 20% 20%, rgba(255,120,170,.18), transparent 25%),
+radial-gradient(circle at 80% 15%, rgba(255,215,120,.14), transparent 20%),
+linear-gradient(135deg,var(--bg1),var(--bg2));
+color:white;
+}
+
+canvas{
+position:fixed;
+inset:0;
+pointer-events:none;
+}
+
+.glass{
+background:rgba(255,255,255,.08);
+border:1px solid rgba(255,255,255,.12);
+backdrop-filter:blur(18px);
+box-shadow:0 20px 60px rgba(0,0,0,.5);
+}
+
+.gold{
+background:linear-gradient(
+90deg,
+#fff6d0,
+#ffd86d,
+#fff6d0
+);
+
+background-size:200%;
+
+-webkit-background-clip:text;
+color:transparent;
+
+animation:shine 4s linear infinite;
+}
+
+@keyframes shine{
+to{
+background-position:200%;
+}
+}
+
+.btn{
+background:rgba(255,255,255,.1);
+border:1px solid rgba(255,255,255,.15);
+transition:.3s;
+}
+
+.btn:hover{
+transform:scale(1.05);
+background:rgba(255,255,255,.2);
+}
+
+.hiddenScene{
+opacity:0;
+pointer-events:none;
+transform:scale(.95);
+}
+
+.showScene{
+opacity:1;
+pointer-events:auto;
+transform:scale(1);
+transition:1s;
+}
+
+.slide{
+transition:1s;
+animation:slideFade 1s ease;
+}
+
+@keyframes slideFade{
+
+from{
+opacity:0;
+transform:scale(1.08);
+filter:blur(10px);
+}
+
+to{
+opacity:1;
+transform:scale(1);
+filter:blur(0);
+}
+
+}
+
+.neonText{
+
+animation:neon 2s ease infinite;
+
+}
+
+@keyframes neon{
+
+0%,100%{
+
+text-shadow:
+0 0 10px rgba(255,255,255,.5),
+0 0 30px rgba(255,180,200,.5),
+0 0 60px rgba(255,220,120,.4);
+
+}
+
+50%{
+
+text-shadow:
+0 0 20px rgba(255,255,255,.9),
+0 0 50px rgba(255,180,200,.9),
+0 0 100px rgba(255,220,120,.8);
+
+}
+
+}
+
+.photo-glow{
+box-shadow:
+0 0 30px rgba(255,255,255,.2),
+0 0 60px rgba(255,180,200,.3),
+0 0 90px rgba(255,220,120,.2);
+}
+
+.petal{
+position:absolute;
+font-size:24px;
+pointer-events:none;
+animation:fall linear forwards;
+}
+
+@keyframes fall{
+
+from{
+transform:translateY(-50px) rotate(0deg);
+opacity:0;
+}
+
+to{
+transform:translateY(110vh) rotate(360deg);
+opacity:1;
+}
+
+}
+
+.sparkle{
+position:absolute;
+font-size:18px;
+pointer-events:none;
+animation:sparkleAnim 4s linear forwards;
+}
+
+@keyframes sparkleAnim{
+
+from{
+opacity:0;
+transform:scale(.5);
+}
+
+50%{
+opacity:1;
+}
+
+to{
+opacity:0;
+transform:scale(1.5);
+}
+
+}
+
+.floatingHeart{
+position:absolute;
+font-size:24px;
+pointer-events:none;
+animation:heartFloat linear forwards;
+}
+
+@keyframes heartFloat{
+
+from{
+transform:translateY(0) scale(.7);
+opacity:0;
+}
+
+20%{
+opacity:1;
+}
+
+to{
+transform:translateY(-120vh) scale(1.5);
+opacity:0;
+}
+
+}
+
+.eq-bar{
+width:8px;
+border-radius:999px;
+background:linear-gradient(to top,#ff91b9,#ffe18a);
+animation:eq 1s ease infinite;
+transform-origin:bottom;
+}
+
+.eq-bar:nth-child(2){animation-delay:.1s}
+.eq-bar:nth-child(3){animation-delay:.2s}
+.eq-bar:nth-child(4){animation-delay:.3s}
+.eq-bar:nth-child(5){animation-delay:.4s}
+
+@keyframes eq{
+
+0%,100%{
+transform:scaleY(.3);
+}
+
+50%{
+transform:scaleY(1);
+}
+
+}
+
+#finalOverlay{
+animation:endFade 2s ease;
+}
+
+@keyframes endFade{
+
+from{
+opacity:0;
+backdrop-filter:blur(0px);
+}
+
+to{
+opacity:1;
+backdrop-filter:blur(20px);
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<canvas id="canvas"></canvas>
+
+<audio id="birthdayMusic" src="hbd.mp3" loop></audio>
+
+<section
+id="intro"
+class="showScene fixed inset-0 flex items-center justify-center p-5">
+
+<div class="glass rounded-[40px] p-8 w-full max-w-6xl">
+
+<div class="grid lg:grid-cols-2 gap-8 items-center">
+
+<div>
+
+<div class="uppercase tracking-[.4em] text-white/60 text-sm mb-5">
+Luxury Birthday Experience
+</div>
+
+<h1 class="text-5xl md:text-8xl font-black leading-none gold">
+HAPPY<br>BIRTHDAY
+</h1>
+
+<p class="mt-5 text-white/75 text-lg">
+Masukkan nama, umur, dan foto spesial 🎉
+</p>
+
+</div>
+
+<div class="glass rounded-[30px] p-6">
+
+<div class="mb-4">
+
+<label class="text-sm text-white/60">
+Nama
+</label>
+
+<input
+id="nameInput"
+type="text"
+placeholder="Nama spesial..."
+class="w-full mt-2 p-4 rounded-2xl bg-white/10 border border-white/10 outline-none"
+/>
+
+</div>
+
+<div class="mb-4">
+
+<label class="text-sm text-white/60">
+Umur
+</label>
+
+<input
+id="ageInput"
+type="number"
+placeholder="19"
+class="w-full mt-2 p-4 rounded-2xl bg-white/10 border border-white/10 outline-none"
+/>
+
+</div>
+
+<div class="mb-6">
+
+<label class="text-sm text-white/60">
+Foto Spesial
+</label>
+
+<input
+id="photoInput"
+type="file"
+accept="image/*"
+capture="environment"
+class="w-full mt-2 p-4 rounded-2xl bg-white/10 border border-white/10 outline-none"
+/>
+
+</div>
+
+<button
+id="startBtn"
+class="btn w-full py-4 rounded-2xl text-lg font-semibold">
+Mulai Perayaan 🎉
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section
+id="celebration"
+class="hiddenScene fixed inset-0 overflow-hidden">
+
+<div id="slides" class="w-full h-full relative">
+
+<div class="slide absolute inset-0 flex flex-col items-center justify-center text-center p-8">
+
+<div class="uppercase tracking-[.4em] text-white/60 text-sm mb-5">
+Luxury Birthday Experience
+</div>
+
+<h1 class="text-6xl md:text-8xl font-black gold neonText">
+WELCOME
+</h1>
+
+<p class="mt-5 text-xl text-white/70">
+Sebuah malam spesial telah dimulai ✨
+</p>
+
+</div>
+
+<div class="slide absolute inset-0 flex flex-col items-center justify-center text-center p-8 hidden">
+
+<h1
+id="title"
+class="text-5xl md:text-8xl font-black gold neonText leading-none">
+</h1>
+
+<p
+id="ageText"
+class="mt-5 text-2xl text-white/80">
+</p>
+
+</div>
+
+<div class="slide absolute inset-0 flex flex-col items-center justify-center text-center p-8 hidden">
+
+<img
+id="photoPreview"
+class="hidden w-72 h-72 object-cover rounded-full border-4 border-white/20 photo-glow"
+/>
+
+<div class="mt-8 text-3xl gold font-bold">
+You Are Special 💖
+</div>
+
+</div>
+
+<div class="slide absolute inset-0 flex flex-col items-center justify-center text-center p-8 hidden">
+
+<div
+id="messageBox"
+class="glass rounded-[35px] p-8 text-2xl text-white max-w-2xl">
+</div>
+
+</div>
+
+<div class="slide absolute inset-0 flex flex-col items-center justify-center text-center p-8 hidden">
+
+<h1 class="text-6xl md:text-8xl font-black gold neonText">
+HAPPY<br>BIRTHDAY 🎉
+</h1>
+
+<div class="mt-10 flex gap-4 flex-wrap justify-center">
+
+<button
+id="loveBtn"
+class="btn px-6 py-4 rounded-full text-lg">
+💖 Love
+</button>
+
+<button
+id="fireworkBtn"
+class="btn px-6 py-4 rounded-full text-lg">
+🎆 Firework
+</button>
+
+<button
+id="snowBtn"
+class="btn px-6 py-4 rounded-full text-lg">
+❄ Snow
+</button>
+
+<button
+id="roseBtn"
+class="btn px-6 py-4 rounded-full text-lg">
+🌹 Roses
+</button>
+
+<button
+id="flashBtn"
+class="btn px-6 py-4 rounded-full text-lg">
+⚡ Flash
+</button>
+
+</div>
+
+<div class="mt-12">
+
+<div class="flex items-end justify-center gap-3 h-[150px]">
+
+<div class="eq-bar h-[60px]"></div>
+<div class="eq-bar h-[140px]"></div>
+<div class="eq-bar h-[90px]"></div>
+<div class="eq-bar h-[170px]"></div>
+<div class="eq-bar h-[120px]"></div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<div
+id="finalOverlay"
+class="fixed inset-0 hidden items-center justify-center bg-black/70 backdrop-blur-xl z-50">
+
+<div class="text-center p-8">
+
+<h1 class="text-6xl md:text-8xl gold font-black neonText">
+THE END 💖
+</h1>
+
+<p class="mt-5 text-xl text-white/80">
+Semoga harimu seindah malam ini ✨
+</p>
+
+</div>
+
+</div>
+
+<script>
+
+const intro = document.getElementById("intro");
+const celebration = document.getElementById("celebration");
+
+const startBtn = document.getElementById("startBtn");
+
+const title = document.getElementById("title");
+const ageText = document.getElementById("ageText");
+
+const messageBox = document.getElementById("messageBox");
+
+const photoInput = document.getElementById("photoInput");
+const photoPreview = document.getElementById("photoPreview");
+
+const music = document.getElementById("birthdayMusic");
+
+const loveBtn = document.getElementById("loveBtn");
+const fireworkBtn = document.getElementById("fireworkBtn");
+
+const snowBtn = document.getElementById("snowBtn");
+const roseBtn = document.getElementById("roseBtn");
+const flashBtn = document.getElementById("flashBtn");
+
+const finalOverlay = document.getElementById("finalOverlay");
+
+const slides =
+document.querySelectorAll(".slide");
+
+let currentSlide = 0;
+
+function showSlide(index){
+
+slides.forEach(slide=>{
+slide.classList.add("hidden");
+});
+
+slides[index].classList.remove("hidden");
+
+}
+
+function nextSlide(){
+
+currentSlide++;
+
+if(currentSlide >= slides.length){
+currentSlide = slides.length - 1;
+return;
+}
+
+showSlide(currentSlide);
+
+}
+
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+let w,h;
+
+function resize(){
+
+w = canvas.width = innerWidth;
+h = canvas.height = innerHeight;
+
+}
+
+resize();
+
+addEventListener("resize",resize);
+
+const particles = [];
+
+function random(min,max){
+return Math.random()*(max-min)+min;
+}
+
+function confetti(x,y){
+
+for(let i=0;i<150;i++){
+
+particles.push({
+
+x,
+y,
+
+vx:random(-6,6),
+vy:random(-12,-2),
+
+size:random(4,8),
+
+color:[
+"#ffd36b",
+"#ff8fb7",
+"#ffffff",
+"#ff5d8f"
+][Math.floor(Math.random()*4)],
+
+life:100
+
+});
+
+}
+
+}
+
+function animate(){
+
+ctx.clearRect(0,0,w,h);
+
+for(let i=particles.length-1;i>=0;i--){
+
+let p = particles[i];
+
+p.x += p.vx;
+p.y += p.vy;
+
+p.vy += .15;
+
+p.life--;
+
+ctx.fillStyle = p.color;
+
+ctx.fillRect(
+p.x,
+p.y,
+p.size,
+p.size
+);
+
+if(p.life <= 0){
+
+particles.splice(i,1);
+
+}
+
+}
+
+requestAnimationFrame(animate);
+
+}
+
+animate();
+
+function createPetal(){
+
+const el = document.createElement("div");
+
+el.className = "petal";
+
+el.innerHTML =
+["🌹","🌸","💖","✨"][Math.floor(Math.random()*4)];
+
+el.style.left =
+random(0,innerWidth)+"px";
+
+el.style.animationDuration =
+random(6,12)+"s";
+
+document.body.appendChild(el);
+
+setTimeout(()=>{
+el.remove();
+},12000);
+
+}
+
+setInterval(createPetal,500);
+
+function createSparkle(){
+
+const sparkle =
+document.createElement("div");
+
+sparkle.className = "sparkle";
+
+sparkle.innerHTML = "✨";
+
+sparkle.style.left =
+random(0,innerWidth)+"px";
+
+sparkle.style.top =
+random(0,innerHeight)+"px";
+
+document.body.appendChild(sparkle);
+
+setTimeout(()=>{
+sparkle.remove();
+},4000);
+
+}
+
+setInterval(createSparkle,700);
+
+const messages = [
+
+"Semoga semua impianmu tercapai 💖",
+
+"Terima kasih sudah bertahan sejauh ini ✨",
+
+"Kamu sangat berharga 🌹",
+
+"Semoga bahagia selalu menyertaimu 🎂",
+
+"Dunia terasa lebih indah karena ada kamu 💕",
+
+"Selamat menikmati hari spesialmu 🎉"
+
+];
+
+function showMessages(i=0){
+
+if(i >= messages.length) return;
+
+messageBox.innerHTML = `
+<div>
+${messages[i]}
+</div>
+`;
+
+setTimeout(()=>{
+showMessages(i+1);
+},3500);
+
+}
+
+startBtn.onclick = async ()=>{
+
+const name =
+document.getElementById("nameInput").value || "Seseorang";
+
+const age =
+document.getElementById("ageInput").value || "17";
+
+intro.classList.remove("showScene");
+intro.classList.add("hiddenScene");
+
+celebration.classList.remove("hiddenScene");
+celebration.classList.add("showScene");
+
+title.innerHTML =
+`Selamat Ulang Tahun,<br>${name} 💖`;
+
+ageText.innerHTML =
+`Hari ini kamu berumur ${age} tahun ✨`;
+
+const file = photoInput.files && photoInput.files[0];
+
+if(file){
+
+const reader = new FileReader();
+
+reader.onload = (e)=>{
+
+photoPreview.src = e.target.result;
+
+photoPreview.style.display = "block";
+
+photoPreview.classList.remove("hidden");
+
+};
+
+reader.readAsDataURL(file);
+
+}else{
+
+photoPreview.src =
+"https://i.imgur.com/8Km9tLL.jpg";
+
+photoPreview.style.display = "block";
+
+}
+
+music.volume = .7;
+
+await music.play();
+
+confetti(w/2,h/2);
+
+setInterval(()=>{
+
+confetti(
+random(w*.2,w*.8),
+random(h*.2,h*.7)
+);
+
+},1800);
+
+showMessages();
+
+setInterval(()=>{
+nextSlide();
+},5000);
+
+setTimeout(()=>{
+
+finalOverlay.classList.remove("hidden");
+finalOverlay.classList.add("flex");
+
+},32000);
+
+}
+
+loveBtn.onclick = ()=>{
+
+for(let i=0;i<20;i++){
+
+const heart =
+document.createElement("div");
+
+heart.className =
+"floatingHeart";
+
+heart.innerHTML =
+["💖","💕","💗","✨"][Math.floor(Math.random()*4)];
+
+heart.style.left =
+random(0,innerWidth)+"px";
+
+heart.style.bottom =
+"-20px";
+
+heart.style.animationDuration =
+random(3,7)+"s";
+
+document.body.appendChild(heart);
+
+setTimeout(()=>{
+heart.remove();
+},7000);
+
+}
+
+}
+
+fireworkBtn.onclick = ()=>{
+
+for(let i=0;i<6;i++){
+
+setTimeout(()=>{
+
+confetti(
+random(w*.2,w*.8),
+random(h*.2,h*.7)
+);
+
+},i*300);
+
+}
+
+}
+
+snowBtn.onclick = ()=>{
+
+for(let i=0;i<80;i++){
+
+const snow =
+document.createElement("div");
+
+snow.className = "floatingHeart";
+
+snow.innerHTML = "❄";
+
+snow.style.left =
+random(0,innerWidth)+"px";
+
+snow.style.top = "-50px";
+
+snow.style.animationDuration =
+random(4,10)+"s";
+
+snow.style.fontSize =
+random(14,30)+"px";
+
+document.body.appendChild(snow);
+
+setTimeout(()=>{
+snow.remove();
+},10000);
+
+}
+
+};
+
+roseBtn.onclick = ()=>{
+
+for(let i=0;i<40;i++){
+
+const rose =
+document.createElement("div");
+
+rose.className = "petal";
+
+rose.innerHTML =
+["🌹","🥀","🌺"][Math.floor(Math.random()*3)];
+
+rose.style.left =
+random(0,innerWidth)+"px";
+
+rose.style.animationDuration =
+random(5,12)+"s";
+
+rose.style.fontSize =
+random(20,40)+"px";
+
+document.body.appendChild(rose);
+
+setTimeout(()=>{
+rose.remove();
+},12000);
+
+}
+
+};
+
+flashBtn.onclick = ()=>{
+
+const flash =
+document.createElement("div");
+
+flash.style.position = "fixed";
+flash.style.inset = "0";
+flash.style.background = "white";
+flash.style.zIndex = "9999";
+flash.style.opacity = ".9";
+
+document.body.appendChild(flash);
+
+setTimeout(()=>{
+flash.style.transition = ".8s";
+flash.style.opacity = "0";
+},100);
+
+setTimeout(()=>{
+flash.remove();
+},1000);
+
+confetti(w/2,h/2);
+
+};
+
+</script>
+
+</body>
+</html>
